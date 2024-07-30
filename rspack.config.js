@@ -44,9 +44,22 @@ module.exports = function (env) {
             },
           },
           {
-            test: /\.js$/,
-            use: ["babel-loader"],
-            exclude: path.resolve(__dirname, "node_modules"),
+            test: /\.(j|t)s$/,
+            exclude: [/[\\/]node_modules[\\/]/],
+            loader: "builtin:swc-loader",
+            options: {
+              jsc: {
+                parser: {
+                  syntax: 'ecmascript',
+                  jsx: true,
+                },
+                externalHelpers: true,
+              },
+              env: {
+                targets: "Chrome >= 48",
+              },
+            },
+            type: 'javascript/auto',
           },
           // Images: Copy image files to build folder
           { test: /\.(?:ico|gif|png|jpg|jpeg)$/i, type: "asset/resource" },
