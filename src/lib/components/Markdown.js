@@ -1,10 +1,26 @@
 import gfm from "remark-gfm";
 import ReactMarkdown from "react-markdown";
-import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
-import { tomorrow } from "react-syntax-highlighter/dist/esm/styles/prism";
+import { PrismLight as SyntaxHighlighter } from "react-syntax-highlighter/dist/esm/light";
+import tomorrow from "react-syntax-highlighter/dist/esm/styles/prism/tomorrow";
 import React from "react";
 import mentions from "./remark/mentions";
 import hashtags from "./remark/hashtags";
+
+import javascript from 'react-syntax-highlighter/dist/esm/languages/prism/javascript';
+import typescript from 'react-syntax-highlighter/dist/esm/languages/prism/typescript';
+import jsx from 'react-syntax-highlighter/dist/esm/languages/prism/jsx';
+import bash from 'react-syntax-highlighter/dist/esm/languages/prism/bash';
+import css from 'react-syntax-highlighter/dist/esm/languages/prism/css';
+import json from 'react-syntax-highlighter/dist/esm/languages/prism/json';
+import rust from 'react-syntax-highlighter/dist/esm/languages/prism/rust';
+
+SyntaxHighlighter.registerLanguage('javascript', javascript);
+SyntaxHighlighter.registerLanguage('typescript', typescript);
+SyntaxHighlighter.registerLanguage('jsx', jsx);
+SyntaxHighlighter.registerLanguage('bash', bash);
+SyntaxHighlighter.registerLanguage('css', css);
+SyntaxHighlighter.registerLanguage('json', json);
+SyntaxHighlighter.registerLanguage('rust', rust);
 
 export const Markdown = (props) => {
   const {
@@ -37,13 +53,13 @@ export const Markdown = (props) => {
           ) : onLinkClick ? (
             <a onClick={onLinkClick} {...props} />
           ) : (
-            <a target="_blank" {...props} />
+            <a target="_blank" rel="noopener noreferrer" {...props} />
           ),
         img: ({ node, ...props }) =>
           onImage ? (
             onImage({ ...props })
           ) : (
-            <img className="img-fluid" {...props} />
+            <img className="img-fluid" alt="" {...props} />
           ),
         blockquote: ({ node, ...props }) => (
           <blockquote className="blockquote" {...props} />
@@ -58,13 +74,14 @@ export const Markdown = (props) => {
 
           return !inline && match ? (
             <SyntaxHighlighter
-              children={String(children).replace(/\n$/, "")}
               style={tomorrow}
               language={match[1]}
               PreTag="div"
               {...{ wrapLines, lineProps, showLineNumbers, lineNumberStyle }}
               {...props}
-            />
+            >
+              {String(children).replace(/\n$/, "")}
+            </SyntaxHighlighter>
           ) : (
             <code className={className} {...props}>
               {children}
