@@ -46,7 +46,7 @@ module.exports = () => {
     ],
     optimization: {
       minimize: true,
-      minimizer: [new rspack.SwcCssMinimizerRspackPlugin(), "..."],
+      minimizer: [new rspack.LightningCssMinimizerRspackPlugin(), "..."],
     },
     performance: {
       hints: false,
